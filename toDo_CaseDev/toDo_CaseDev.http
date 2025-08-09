@@ -1,0 +1,6 @@
+@toDo_CaseDev_HostAddress = http://localhost:5161
+
+GET {{toDo_CaseDev_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
