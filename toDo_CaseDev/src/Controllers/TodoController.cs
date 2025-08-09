@@ -26,7 +26,7 @@ namespace TodoApi.Controllers
                 Id = task.Id,
                 Title = task.Title,
                 Description = task.Description,
-                Status = task.Status.ToString()
+                Status = task.Status.GetDescription()
             }).ToList();
 
             return Ok(tasksDto);
@@ -47,15 +47,35 @@ namespace TodoApi.Controllers
             return CreatedAtAction(nameof(GetAll), new { id = newTodo.Id }, newTodo);
         }
 
-        // PUT: api/todo/{id}/status - Atualiza o status de uma tarefa.
-        [HttpPut("{id}/status")]
-        public IActionResult UpdateStatus(int id, [FromBody] UpdateTodoDto statusDto)
+        // PUT: api/todo/{id} - Atualiza uma tarefa.
+        [HttpPut("{id}")]
+        public IActionResult Update(int id, [FromBody] CreateTodoDto todoDto)
         {
             var task = _todoService.GetById(id);
 
             if (task == null)
             {
-                return NotFound();
+                var errorResponse = new ApiErrorResponse("Recurso Não Encontrado", "A tarefa com o ID fornecido não existe.");
+                return NotFound(errorResponse);
+            }
+
+            task.Title = todoDto.Title;
+            task.Description = todoDto.Description ?? string.Empty;
+
+            var updatedTodo = _todoService.Update(task);
+            return Ok(updatedTodo);
+        }
+
+        // PUT: api/todo/{id}/status - Atualiza o status de uma tarefa.
+        [HttpPut("{id}/status")]
+        public IActionResult UpdateStatus(int id, [FromBody] UpdateStatusTodoDto statusDto)
+        {
+            var task = _todoService.GetById(id);
+
+            if (task == null)
+            {
+                var errorResponse = new ApiErrorResponse("Recurso Não Encontrado", "A tarefa com o ID fornecido não existe.");
+                return NotFound(errorResponse);
             }
 
             _todoService.UpdateStatus(id, statusDto.Status);
@@ -70,7 +90,8 @@ namespace TodoApi.Controllers
 
             if (task == null)
             {
-                return NotFound();
+                var errorResponse = new ApiErrorResponse("Recurso Não Encontrado", "A tarefa com o ID fornecido não existe.");
+                return NotFound(errorResponse);
             }
 
             _todoService.Delete(id);

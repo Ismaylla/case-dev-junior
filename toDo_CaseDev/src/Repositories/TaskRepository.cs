@@ -29,6 +29,16 @@ namespace TodoApi.Repositories
             return newTask;
         }
 
+        public TodoItem Update(TodoItem updatedTask)
+        {
+            if (_tasks.ContainsKey(updatedTask.Id))
+            {
+                _tasks[updatedTask.Id] = updatedTask;
+                return updatedTask;
+            }
+            throw new KeyNotFoundException("Tarefa não encontrada.");
+        }
+
         public void UpdateStatus(int id, TodoStatus newStatus)
         {
             if (_tasks.TryGetValue(id, out var taskToUpdate))
@@ -36,13 +46,14 @@ namespace TodoApi.Repositories
                 taskToUpdate.Status = newStatus;
             }
         }
-        
+
         public void Delete(int id)
         {
             if (_tasks.ContainsKey(id))
             {
                 _tasks.Remove(id);
             }
+            throw new KeyNotFoundException("Tarefa não encontrada.");
         }
 
     }

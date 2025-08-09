@@ -18,11 +18,12 @@ namespace TodoApi.Services
 
         public TodoItem Create(TodoItem newTask)
         {
-            if (string.IsNullOrEmpty(newTask.Title))
-            {
-                throw new ArgumentException("O título é obrigatório.", nameof(newTask.Title));
-            }
             return _taskRepository.Create(newTask);
+        }
+
+        public TodoItem Update(TodoItem updatedTask)
+        {
+            return _taskRepository.Update(updatedTask);
         }
 
         public void UpdateStatus(int id, TodoStatus status)
