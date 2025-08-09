@@ -1,9 +1,11 @@
 using TodoApi.Services;
+using TodoApi.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
+builder.Services.AddSingleton<ITaskRepository, TaskRepository>();  // Registro do repositório
+builder.Services.AddSingleton<TodoService>();  // Registro do serviço
 builder.Services.AddSingleton<TodoService>();
 builder.Services.AddControllers();
 builder.Services.AddSwaggerGen();

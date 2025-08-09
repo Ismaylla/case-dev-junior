@@ -1,79 +1,50 @@
 using System.Text.Json;
 using TodoApi.Models;
+using TodoApi.Repositories;
 
 namespace TodoApi.Services
 {
     public class TodoService
     {
-        private const string JsonFilePath = "tasks.json";
-        private readonly List<TodoItem> _tasks;
-        private int _nextId = 1;
+        private readonly ITaskRepository _taskRepository;
 
-        public TodoService()
+        public TodoService(ITaskRepository taskRepository)
         {
-            _tasks = LoadTasksFromFile();
-
-            if (_tasks.Any())
-            {
-                _nextId = _tasks.Max(t => t.Id) + 1;
-            }
+            _taskRepository = taskRepository;
         }
 
-        private List<TodoItem> LoadTasksFromFile()
-        {
-            if (!File.Exists(JsonFilePath))
-            {
-                return new List<TodoItem>();
-            }
-
-            var json = File.ReadAllText(JsonFilePath);
-
-            if (string.IsNullOrEmpty(json))
-            {
-                return new List<TodoItem>();
-            }
-
-            return JsonSerializer.Deserialize<List<TodoItem>>(json) ?? new List<TodoItem>();
-        }
-
-        private void SaveTasksToFile()
-        {
-            var options = new JsonSerializerOptions { WriteIndented = true };
-            var json = JsonSerializer.Serialize(_tasks, options);
-            File.WriteAllText(JsonFilePath, json);
-        }
-
-        public List<TodoItem> GetAll() => _tasks;
-
-        public TodoItem? GetById(int id) => _tasks.FirstOrDefault(t => t.Id == id);
+        public List<TodoItem> GetAll() => _taskRepository.GetAll();
+        public TodoItem? GetById(int id) => _taskRepository.GetById(id);
 
         public TodoItem Create(TodoItem newTask)
         {
-            newTask.Id = _nextId++;
-            newTask.Status = TodoStatus.Pendente;
-            _tasks.Add(newTask);
-            SaveTasksToFile();
-            return newTask;
+            if (string.IsNullOrEmpty(newTask.Title))
+            {
+                throw new ArgumentException("O título é obrigatório.", nameof(newTask.Title));
+            }
+            return _taskRepository.Create(newTask);
         }
 
         public void UpdateStatus(int id, TodoStatus newStatus)
         {
-            var taskToUpdate = GetById(id);
-            if (taskToUpdate != null)
+            var task = _taskRepository.GetById(id);
+            if (task == null)
             {
-                taskToUpdate.Status = newStatus;
-                SaveTasksToFile();
+                throw new KeyNotFoundException($"Tarefa com ID {id} não encontrada.");
             }
+            _taskRepository.UpdateStatus(id, newStatus);
         }
 
         public void Delete(int id)
         {
-            var taskToDelete = GetById(id);
-            if (taskToDelete != null)
+            var task = _taskRepository.GetById(id);
+            if (task == null)
             {
-                _tasks.Remove(taskToDelete);
-                SaveTasksToFile();
+                throw new KeyNotFoundException($"Tarefa com ID {id} não encontrada.");
             }
+            _taskRepository.Delete(id);
         }
+
+        
     }
 }
