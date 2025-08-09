@@ -13,7 +13,7 @@ namespace TodoApi.Services
             _taskRepository = taskRepository;
         }
 
-        public List<TodoItemDto> GetAll() => _taskRepository.GetAll();
+        public List<TodoItem> GetAll() => _taskRepository.GetAll();
         public TodoItem? GetById(int id) => _taskRepository.GetById(id);
 
         public TodoItem Create(TodoItem newTask)
@@ -25,14 +25,14 @@ namespace TodoApi.Services
             return _taskRepository.Create(newTask);
         }
 
-        public void UpdateStatus(int id, TodoStatus newStatus)
+        public void UpdateStatus(int id, TodoStatus status)
         {
             var task = _taskRepository.GetById(id);
             if (task == null)
             {
                 throw new KeyNotFoundException($"Tarefa com ID {id} não encontrada.");
             }
-            _taskRepository.UpdateStatus(id, newStatus);
+            _taskRepository.UpdateStatus(id, status);
         }
 
         public void Delete(int id)
