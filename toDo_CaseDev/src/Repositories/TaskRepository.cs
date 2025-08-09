@@ -53,7 +53,6 @@ namespace TodoApi.Repositories
             {
                 _tasks.Remove(id);
             }
-            throw new KeyNotFoundException("Tarefa não encontrada.");
         }
 
     }

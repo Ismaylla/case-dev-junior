@@ -28,21 +28,11 @@ namespace TodoApi.Services
 
         public void UpdateStatus(int id, TodoStatus status)
         {
-            var task = _taskRepository.GetById(id);
-            if (task == null)
-            {
-                throw new KeyNotFoundException($"Tarefa com ID {id} não encontrada.");
-            }
             _taskRepository.UpdateStatus(id, status);
         }
 
         public void Delete(int id)
         {
-            var task = _taskRepository.GetById(id);
-            if (task == null)
-            {
-                throw new KeyNotFoundException($"Tarefa com ID {id} não encontrada.");
-            }
             _taskRepository.Delete(id);
         }
 
