@@ -1,9 +1,15 @@
 namespace TodoApi.Models
 {
-    public enum TodoStatus
-    {
-        Pendente,
-        EmAndamento,
-        Concluida
-    }
+    using System.ComponentModel;
+public enum TodoStatus
+{
+    [Description("Pendente")]
+    Pendente,
+    
+    [Description("Em Andamento")]
+    EmAndamento,
+    
+    [Description("Concluída")]
+    Concluida
+}
 }
