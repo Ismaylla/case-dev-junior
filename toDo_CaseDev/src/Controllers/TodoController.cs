@@ -17,7 +17,7 @@ namespace TodoApi.Controllers
 
         // GET: api/todo - Lista todas as tarefas.
         [HttpGet]
-        public ActionResult<List<TodoItem>> GetAll()
+        public ActionResult<List<TodoItemDto>> GetAll()
         {
             return _todoService.GetAll();
         }

@@ -13,7 +13,7 @@ namespace TodoApi.Services
             _taskRepository = taskRepository;
         }
 
-        public List<TodoItem> GetAll() => _taskRepository.GetAll();
+        public List<TodoItemDto> GetAll() => _taskRepository.GetAll();
         public TodoItem? GetById(int id) => _taskRepository.GetById(id);
 
         public TodoItem Create(TodoItem newTask)

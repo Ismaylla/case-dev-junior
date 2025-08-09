@@ -5,35 +5,25 @@ namespace TodoApi.Repositories
 {
     public class TaskRepository : ITaskRepository
     {
-        private const string JsonFilePath = "tasks.json";
         private readonly Dictionary<int, TodoItem> _tasks;
         private int _nextId;
 
         public TaskRepository()
         {
-            _tasks = LoadTasksFromFile();
+            _tasks = new Dictionary<int,TodoItem>();
             _nextId = _tasks.Any() ? _tasks.Keys.Max() + 1 : 1;
         }
 
-        private Dictionary<int, TodoItem> LoadTasksFromFile()
+        public List<TodoItemDto> GetAll()
         {
-            if (!File.Exists(JsonFilePath)) return new Dictionary<int, TodoItem>();
-
-            var json = File.ReadAllText(JsonFilePath);
-            if (string.IsNullOrEmpty(json)) return new Dictionary<int, TodoItem>();
-
-            var tasks = JsonSerializer.Deserialize<List<TodoItem>>(json) ?? new List<TodoItem>();
-            return tasks.ToDictionary(t => t.Id);
+            return _tasks.Values.Select(task => new TodoItemDto
+            {
+                Id = task.Id,
+                Title = task.Title,
+                Description = task.Description,
+                Status = task.Status.GetDescription()
+            }).ToList();
         }
-
-        private void SaveTasksToFile()
-        {
-            var options = new JsonSerializerOptions { WriteIndented = true };
-            var json = JsonSerializer.Serialize(_tasks.Values.ToList(), options); // Converte o Dictionary em uma lista
-            File.WriteAllText(JsonFilePath, json);
-        }
-
-        public List<TodoItem> GetAll() => _tasks.Values.ToList();
 
         public TodoItem? GetById(int id) => _tasks.GetValueOrDefault(id);
 
@@ -42,7 +32,6 @@ namespace TodoApi.Repositories
             newTask.Id = _nextId++;
             newTask.Status = TodoStatus.Pendente;
             _tasks[newTask.Id] = newTask;  // Adiciona ou substitui a tarefa
-            SaveTasksToFile();
             return newTask;
         }
 
@@ -51,15 +40,14 @@ namespace TodoApi.Repositories
             if (_tasks.TryGetValue(id, out var taskToUpdate))
             {
                 taskToUpdate.Status = newStatus;
-                SaveTasksToFile();
             }
         }
         
         public void Delete(int id)
         {
-            if (_tasks.Remove(id))
+            if (_tasks.ContainsKey(id))
             {
-                SaveTasksToFile();
+                _tasks.Remove(id);
             }
         }
 
