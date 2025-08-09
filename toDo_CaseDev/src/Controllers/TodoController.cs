@@ -32,6 +32,28 @@ namespace TodoApi.Controllers
             return Ok(tasksDto);
         }
 
+        // GET: api/todo/{id} - Obtém uma tarefa pelo ID.
+        [HttpGet("{id}")]
+        public ActionResult<TodoDto> GetById(int id)
+        {
+            var task = _todoService.GetById(id);
+            if (task == null)
+            {
+                var errorResponse = new ApiErrorResponse("Recurso Não Encontrado", "A tarefa com o ID fornecido não existe.");
+                return NotFound(errorResponse);
+            }
+
+            var taskDto = new TodoDto
+            {
+                Id = task.Id,
+                Title = task.Title,
+                Description = task.Description,
+                Status = task.Status.GetDescription()
+            };
+
+            return Ok(taskDto);
+        }
+
         // POST: api/todo - Cria uma nova tarefa.
         [HttpPost]
         public ActionResult<TodoItem> Create(CreateTodoDto todoDto)
