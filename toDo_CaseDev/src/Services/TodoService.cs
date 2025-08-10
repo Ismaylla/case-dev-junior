@@ -1,10 +1,8 @@
-using System.Text.Json;
 using TodoApi.Models;
 using TodoApi.Repositories;
 
-namespace TodoApi.Services
-{
-    public class TodoService
+namespace TodoApi.Services {
+    public class TodoService : ITodoService
     {
         private readonly ITaskRepository _taskRepository;
 
