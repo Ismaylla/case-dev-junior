@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -56,17 +57,47 @@ builder.Services.AddAuthentication(options =>
 // Autorização
 builder.Services.AddAuthorization();
 
-
 // Adiciona os serviços necessários ao contêiner de injeção de dependência
-// Registro do repositório como Singleton (uma única instância para toda a aplicação)
 builder.Services.AddSingleton<ITaskRepository, TaskRepository>();
-
-// Registro do serviço TodoService como Scoped (uma instância por requisição HTTP)
 builder.Services.AddScoped<ITodoService, TodoService>(); // Registro do serviço
 builder.Services.AddControllers();
 
 // Swagger (documentação)
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "Todo API",
+        Version = "v1"
+    });
+
+    // Adiciona configuração de segurança para o Bearer Token
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        In = ParameterLocation.Header, // O token será passado no cabeçalho
+        Name = "Authorization", // O nome do cabeçalho
+        Type = SecuritySchemeType.ApiKey, // Tipo de autenticação
+        Scheme = "Bearer", // O prefixo que usamos no cabeçalho (Bearer)
+        BearerFormat = "JWT", // Formato do token
+        Description = "Informe o token JWT com o prefixo 'Bearer' no cabeçalho"
+    });
+
+    // Configuração de segurança para aplicar a autenticação nas rotas
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            new string[] { }
+        }
+    });
+});
 
 var app = builder.Build();
 
@@ -79,7 +110,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-//Autenticação vem antes da autorização
+// Autenticação vem antes da autorização
 app.UseAuthentication();
 app.UseAuthorization();
 

@@ -2,11 +2,13 @@ using Microsoft.AspNetCore.Mvc;
 using TodoApi.Exceptions;
 using TodoApi.Services;
 using TodoApi.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TodoApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize] // Requer autenticação para acessar os endpoints
     public class TodoController : ControllerBase
     {
         private readonly ITodoService _todoService;
