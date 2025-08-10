@@ -1,17 +1,16 @@
-import styles from './Login.module.css';
+import styles from './Register.module.css';
 import { AuthForm } from '../../components/AuthForm/AuthForm';
 import empresaBg from '../../assets/fabrica-moura.webp';
 import logoMoura from '../../assets/logo-moura.svg';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 
-export const Login = () => {
-
+export const Register = () => {
   const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Lógica de login
+    // Lógica de cadastro
     navigate('/home');
   };
 
@@ -22,24 +21,24 @@ export const Login = () => {
         <img src={logoMoura} alt="Logo Moura" className={styles.navbarLogo} />
       </nav>
 
-      {/* Painel ESQUERDO (agora com formulário) */}
+      {/* Painel ESQUERDO (formulário) */}
       <div className={styles.leftPanel}>
         <div className={styles.authWrapper}>
-          <h1 className={styles.title}>Bem-vindo de volta</h1>
-          <p className={styles.subtitle}>Faça login para acessar sua conta</p>
+          <h1 className={styles.title}>Crie sua conta</h1>
+          <p className={styles.subtitle}>Preencha os campos para se cadastrar</p>
           
-          <AuthForm isLogin={true} onSubmit={handleSubmit} />
+          <AuthForm isLogin={false} onSubmit={handleSubmit} />
           
           <p className={styles.switchText}>
-            Não tem uma conta?{' '}
-            <Link to="/register" className={styles.link}>
-              Cadastre-se
+            Já tem uma conta?{' '}
+            <Link to="/login" className={styles.link}>
+              Faça login
             </Link>
           </p>
         </div>
       </div>
 
-      {/* Painel DIREITO (agora com imagem) */}
+      {/* Painel DIREITO (imagem) */}
       <div className={styles.rightPanel}>
         <img 
           src={empresaBg} 
