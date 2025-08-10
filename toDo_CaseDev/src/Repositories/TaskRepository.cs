@@ -14,15 +14,9 @@ namespace TodoApi.Repositories
             _nextId = _tasks.Any() ? _tasks.Keys.Max() + 1 : 1;
         }
 
-        public List<TodoItemDto> GetAll()
+        public List<TodoItem> GetAll()
         {
-            return _tasks.Values.Select(task => new TodoItemDto
-            {
-                Id = task.Id,
-                Title = task.Title,
-                Description = task.Description,
-                Status = task.Status.GetDescription()
-            }).ToList();
+            return _tasks.Values.ToList();
         }
 
         public TodoItem? GetById(int id) => _tasks.GetValueOrDefault(id);
@@ -35,6 +29,16 @@ namespace TodoApi.Repositories
             return newTask;
         }
 
+        public TodoItem Update(TodoItem updatedTask)
+        {
+            if (_tasks.ContainsKey(updatedTask.Id))
+            {
+                _tasks[updatedTask.Id] = updatedTask;
+                return updatedTask;
+            }
+            throw new KeyNotFoundException("Tarefa não encontrada.");
+        }
+
         public void UpdateStatus(int id, TodoStatus newStatus)
         {
             if (_tasks.TryGetValue(id, out var taskToUpdate))
@@ -42,7 +46,7 @@ namespace TodoApi.Repositories
                 taskToUpdate.Status = newStatus;
             }
         }
-        
+
         public void Delete(int id)
         {
             if (_tasks.ContainsKey(id))
