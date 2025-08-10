@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using System.Linq;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +13,7 @@ var jwtSecret = builder.Configuration["Jwt:Secret"] ?? "sua_chave_secreta_aqui";
 builder.Services.AddControllers()
     .ConfigureApiBehaviorOptions(options =>
     {
+        // Custom error response for invalid entries
         options.InvalidModelStateResponseFactory = context =>
         {
             var errors = context.ModelState.Values
@@ -29,10 +29,6 @@ builder.Services.AddControllers()
             return new BadRequestObjectResult(customResponse);
         };
     });
-
-// Registro de serviços e repositórios da aplicação
-builder.Services.AddSingleton<ITaskRepository, TaskRepository>();
-builder.Services.AddSingleton<TodoService>();
 
 //Serviços para usuário e autenticação
 builder.Services.AddSingleton<UserService>();
@@ -59,6 +55,15 @@ builder.Services.AddAuthentication(options =>
 
 // Autorização
 builder.Services.AddAuthorization();
+
+
+// Adiciona os serviços necessários ao contêiner de injeção de dependência
+// Registro do repositório como Singleton (uma única instância para toda a aplicação)
+builder.Services.AddSingleton<ITaskRepository, TaskRepository>();
+
+// Registro do serviço TodoService como Scoped (uma instância por requisição HTTP)
+builder.Services.AddScoped<ITodoService, TodoService>(); // Registro do serviço
+builder.Services.AddControllers();
 
 // Swagger (documentação)
 builder.Services.AddSwaggerGen();

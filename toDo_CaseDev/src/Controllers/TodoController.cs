@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using TodoApi.Models;
+using TodoApi.Exceptions;
 using TodoApi.Services;
+using TodoApi.Models;
 
 namespace TodoApi.Controllers
 {
@@ -8,9 +9,9 @@ namespace TodoApi.Controllers
     [Route("api/[controller]")]
     public class TodoController : ControllerBase
     {
-        private readonly TodoService _todoService;
+        private readonly ITodoService _todoService;
 
-        public TodoController(TodoService todoService)
+        public TodoController(ITodoService todoService)
         {
             _todoService = todoService;
         }
@@ -58,6 +59,11 @@ namespace TodoApi.Controllers
         [HttpPost]
         public ActionResult<TodoItem> Create(CreateTodoDto todoDto)
         {
+            if (string.IsNullOrWhiteSpace(todoDto.Title))
+            {
+                return BadRequest(new ApiErrorResponse("Erro de Validação", "O título é obrigatório."));
+            }
+
             var todoItem = new TodoItem
             {
                 Title = todoDto.Title,
@@ -73,6 +79,11 @@ namespace TodoApi.Controllers
         [HttpPut("{id}")]
         public IActionResult Update(int id, [FromBody] CreateTodoDto todoDto)
         {
+            if (string.IsNullOrWhiteSpace(todoDto.Title))
+            {
+                return BadRequest(new ApiErrorResponse("Erro de Validação", "O título é obrigatório."));
+            }
+
             var task = _todoService.GetById(id);
 
             if (task == null)
@@ -101,7 +112,14 @@ namespace TodoApi.Controllers
             }
 
             _todoService.UpdateStatus(id, statusDto.Status);
-            return NoContent();
+            var taskDto = new TodoDto
+            {
+                Id = task.Id,
+                Title = task.Title,
+                Description = task.Description,
+                Status = statusDto.Status.GetDescription()
+            };
+            return Ok(taskDto);
         }
 
         // DELETE: api/todo/{id} - Deleta uma tarefa.

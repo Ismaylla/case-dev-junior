@@ -1,9 +1,8 @@
 using TodoApi.Models;
 
-namespace TodoApi.Repositories
+namespace TodoApi.Services
 {
-
-    public interface ITaskRepository
+    public interface ITodoService
     {
         List<TodoItem> GetAll();
         TodoItem? GetById(int id);
