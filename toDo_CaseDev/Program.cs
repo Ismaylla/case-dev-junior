@@ -26,8 +26,7 @@ builder.Services.AddControllers()
 
 // Add services to the container.
 builder.Services.AddSingleton<ITaskRepository, TaskRepository>();  // Registro do repositório
-builder.Services.AddSingleton<TodoService>();  // Registro do serviço
-builder.Services.AddSingleton<TodoService>();
+builder.Services.AddScoped<ITodoService, TodoService>(); // Registro do serviço
 builder.Services.AddControllers();
 builder.Services.AddSwaggerGen();
 
