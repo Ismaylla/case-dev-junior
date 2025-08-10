@@ -1,0 +1,137 @@
+.sidebar {
+  width: 250px;
+  height: 100vh;
+  background-color: var(--dark-blue);
+  color: var(--white);
+  padding: 20px;
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.logoContainer {
+  text-align: center;
+}
+
+.logo {
+  max-width: 80%;
+  height: auto;
+}
+
+.userContainer {
+  display: flex;
+  justify-content: center;
+}
+
+.userCard {
+  background-color: var(--white);
+  border-radius: 10px;
+  padding: 10px 15px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  max-width: 220px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.userPhoto {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--yellow);
+}
+
+.userName {
+  color: var(--dark-blue);
+  font-size: 0.95rem;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.navButton {
+  padding: 10px 15px;
+  text-align: left;
+  color: var(--white);
+  font-size: 0.95rem;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+}
+
+.navButton:hover {
+  background-color: rgba(var(--yellow-rgb), 0.2);
+}
+
+.withArrow {
+  justify-content: space-between;
+}
+
+.navIcon {
+  font-size: 1.1rem;
+  color: var(--white);
+}
+
+.arrowIcon {
+  transition: transform 0.3s ease;
+  font-size: 1rem;
+}
+
+.arrowOpen {
+  transform: rotate(180deg);
+}
+
+.statusDropdown {
+  position: relative;
+}
+
+.statusOptions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background-color: var(--dark-blue);
+  border: 1px solid var(--yellow);
+  border-radius: 6px;
+  z-index: 10;
+  margin-top: 5px;
+  overflow: hidden;
+}
+
+.statusOption {
+  display: block;
+  width: 100%;
+  padding: 8px 15px;
+  text-align: left;
+  background: var(--white);
+  border: none;
+  font-size: 0.9rem;
+  color: var(--dark-blue);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.statusOption:hover {
+  background-color: var(--yellow);
+}
+
+.selected {
+  background-color: var(--yellow);
+  font-weight: 500;
+}

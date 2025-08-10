@@ -1,0 +1,146 @@
+.task {
+  background-color: var(--white);
+  border-radius: 8px;
+  padding: 15px;
+  margin-bottom: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.3s ease;
+  border-left: 4px solid transparent;
+}
+
+.task:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.pending {
+  border-left-color: #FF5722;
+}
+
+.inProgress {
+  border-left-color: var(--yellow);
+}
+
+.completed {
+  border-left-color: #4CAF50;
+}
+
+.taskContent {
+  flex: 1;
+}
+
+.taskTitle {
+  font-size: 1.1rem;
+  margin-bottom: 5px;
+  color: var(--dark-gray);
+}
+
+.taskDescription {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.taskActions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.statusSelect {
+  padding: 5px 10px;
+  border-radius: 4px;
+  border: 1px solid var(--medium-gray);
+  background-color: var(--white);
+  cursor: pointer;
+}
+
+.deleteButton {
+  font-size: 1.5rem;
+  color: #FF5252;
+  background: none;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: all 0.2s ease;
+}
+
+.deleteButton:hover {
+  background-color: rgba(255, 82, 82, 0.1);
+}
+
+.selectContainer {
+  position: relative;
+  min-width: 150px;
+}
+
+.statusSelect {
+  padding: 8px 15px 8px 30px;
+  border-radius: 8px;
+  border: 1px solid var(--medium-gray);
+  background-color: var(--white);
+  cursor: pointer;
+  font-size: 0.9rem;
+  appearance: none;
+  width: 100%;
+  transition: all 0.2s ease;
+}
+
+.statusSelect:focus {
+  outline: none;
+  border-color: var(--dark-gray);
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.1);
+}
+
+.statusIndicator {
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  transform: translateY(-50%);
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.pendingDot {
+  background-color: #FF5722;
+}
+
+.inProgressDot {
+  background-color: var(--yellow);
+}
+
+.completedDot {
+  background-color: #4CAF50;
+}
+
+.statusSelect option {
+  padding: 8px;
+  position: relative;
+}
+
+.statusSelect option::before {
+  content: '';
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+
+.statusSelect option[value="pending"]::before {
+  background-color: #FF5722;
+}
+
+.statusSelect option[value="in-progress"]::before {
+  background-color: var(--yellow);
+}
+
+.statusSelect option[value="completed"]::before {
+  background-color: #4CAF50;
+}
