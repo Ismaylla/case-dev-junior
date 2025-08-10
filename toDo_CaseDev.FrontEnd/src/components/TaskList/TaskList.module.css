@@ -1,0 +1,90 @@
+.taskListContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.taskSection {
+  background-color: var(--white);
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.sectionTitle {
+  margin-bottom: 15px;
+  font-size: 1.2rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+}
+
+.pendingTitle {
+  color: #FF5722;
+}
+
+.inProgressTitle {
+  color: var(--yellow);
+}
+
+.completedTitle {
+  color: #4CAF50;
+}
+
+.sectionTitle::before {
+  content: '';
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.sectionTitle {
+  position: relative;
+  padding-left: 20px;
+}
+
+.sectionTitle::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+/* Classes específicas para cada status */
+.pending-section .sectionTitle::before {
+  background-color: #FF5722; /* Vermelho */
+}
+
+.inProgress-section .sectionTitle::before {
+  background-color: var(--yellow); /* Amarelo */
+}
+
+.completed-section .sectionTitle::before {
+  background-color: #4CAF50; /* Verde */
+}
+
+.tasks {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.emptyState {
+  text-align: center;
+  padding: 40px 20px;
+  background-color: var(--white);
+  border-radius: 8px;
+  color: var(--dark-gray);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.emptyState p {
+  font-size: 1.1rem;
+  opacity: 0.7;
+}

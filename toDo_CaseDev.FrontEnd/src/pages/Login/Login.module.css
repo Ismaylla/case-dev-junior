@@ -1,0 +1,75 @@
+.container {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+}
+
+.leftPanel {
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  background-color: var(--white);
+}
+
+.rightPanel {
+  width: 40%;
+  position: relative;
+  overflow: hidden;
+  background-color: var(--dark-blue);
+}
+
+.bgImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.authWrapper {
+  width: 100%;
+  max-width: 400px;
+}
+
+.title {
+    color: var(--dark-blue);
+}
+
+/* Navbar */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  background-color: var(--dark-blue);
+  display: flex;
+  align-items: center;
+  padding: 0 2rem;
+  z-index: 1000;
+}
+
+.navbarLogo {
+  height: 70%;
+}
+
+/* Texto de alternância */
+.switchText {
+  text-align: center;
+  margin-top: 2rem;
+  color: var(--dark-blue);
+  font-size: 0.95rem;
+}
+
+.switchText .link {
+  color: var(--dark-blue);
+  font-weight: 600;
+  text-decoration: none;
+  margin-left: 0.3rem;
+  transition: all 0.2s ease;
+}
+
+.switchText .link:hover {
+  text-decoration: underline;
+}
