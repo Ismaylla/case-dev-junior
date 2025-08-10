@@ -58,6 +58,11 @@ namespace TodoApi.Controllers
         [HttpPost]
         public ActionResult<TodoItem> Create(CreateTodoDto todoDto)
         {
+            if (string.IsNullOrWhiteSpace(todoDto.Title))
+            {
+                return BadRequest(new ApiErrorResponse("Erro de Validação", "O título é obrigatório."));
+            }
+
             var todoItem = new TodoItem
             {
                 Title = todoDto.Title,
@@ -73,6 +78,11 @@ namespace TodoApi.Controllers
         [HttpPut("{id}")]
         public IActionResult Update(int id, [FromBody] CreateTodoDto todoDto)
         {
+            if (string.IsNullOrWhiteSpace(todoDto.Title))
+            {
+                return BadRequest(new ApiErrorResponse("Erro de Validação", "O título é obrigatório."));
+            }
+
             var task = _todoService.GetById(id);
 
             if (task == null)

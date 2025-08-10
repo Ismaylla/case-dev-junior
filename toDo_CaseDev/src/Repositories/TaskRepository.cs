@@ -1,8 +1,6 @@
 using TodoApi.Models;
-using System.Text.Json;
 
-namespace TodoApi.Repositories
-{
+namespace TodoApi.Repositories {
     public class TaskRepository : ITaskRepository
     {
         private readonly Dictionary<int, TodoItem> _tasks;
@@ -23,16 +21,28 @@ namespace TodoApi.Repositories
 
         public TodoItem Create(TodoItem newTask)
         {
+            if (string.IsNullOrWhiteSpace(newTask.Title))
+            {
+                throw new ArgumentException("O título da tarefa é obrigatório.", nameof(newTask));
+            }
+
             newTask.Id = _nextId++;
             newTask.Status = TodoStatus.Pendente;
+            newTask.Description ??= string.Empty; // Ensure description is never null
             _tasks[newTask.Id] = newTask;  // Adiciona ou substitui a tarefa
             return newTask;
         }
 
         public TodoItem Update(TodoItem updatedTask)
         {
+            if (string.IsNullOrWhiteSpace(updatedTask.Title))
+            {
+                throw new ArgumentException("O título da tarefa é obrigatório.", nameof(updatedTask));
+            }
+
             if (_tasks.ContainsKey(updatedTask.Id))
             {
+                updatedTask.Description ??= string.Empty; // Ensure description is never null
                 _tasks[updatedTask.Id] = updatedTask;
                 return updatedTask;
             }
