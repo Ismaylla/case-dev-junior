@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using TodoApi.Models;
+using TodoApi.Exceptions;
 using TodoApi.Services;
+using TodoApi.Models;
 
 namespace TodoApi.Controllers
 {
@@ -111,7 +112,14 @@ namespace TodoApi.Controllers
             }
 
             _todoService.UpdateStatus(id, statusDto.Status);
-            return NoContent();
+            var taskDto = new TodoDto
+            {
+                Id = task.Id,
+                Title = task.Title,
+                Description = task.Description,
+                Status = statusDto.Status.GetDescription()
+            };
+            return Ok(taskDto);
         }
 
         // DELETE: api/todo/{id} - Deleta uma tarefa.

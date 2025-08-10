@@ -7,7 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers()
     .ConfigureApiBehaviorOptions(options =>
     {
-        // Custom error response for invalid entries
+        // Personaliza a resposta de erro para requisições inválidas
         options.InvalidModelStateResponseFactory = context =>
         {
             var errors = context.ModelState.Values
@@ -24,10 +24,12 @@ builder.Services.AddControllers()
         };
     });
 
-// Add services to the container.
-builder.Services.AddSingleton<ITaskRepository, TaskRepository>();  // Registro do repositório
-builder.Services.AddSingleton<TodoService>();  // Registro do serviço
-builder.Services.AddSingleton<TodoService>();
+// Adiciona os serviços necessários ao contêiner de injeção de dependência
+// Registro do repositório como Singleton (uma única instância para toda a aplicação)
+builder.Services.AddSingleton<ITaskRepository, TaskRepository>();
+
+// Registro do serviço TodoService como Scoped (uma instância por requisição HTTP)
+builder.Services.AddScoped<ITodoService, TodoService>(); // Registro do serviço
 builder.Services.AddControllers();
 builder.Services.AddSwaggerGen();
 

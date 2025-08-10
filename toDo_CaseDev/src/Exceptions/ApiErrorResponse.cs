@@ -1,4 +1,4 @@
-namespace TodoApi.Models
+namespace TodoApi.Exceptions
 {
     public class ApiErrorResponse
     {
