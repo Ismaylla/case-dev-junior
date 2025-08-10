@@ -8,9 +8,9 @@ namespace TodoApi.Controllers
     [Route("api/[controller]")]
     public class TodoController : ControllerBase
     {
-        private readonly TodoService _todoService;
+        private readonly ITodoService _todoService;
 
-        public TodoController(TodoService todoService)
+        public TodoController(ITodoService todoService)
         {
             _todoService = todoService;
         }
@@ -58,6 +58,11 @@ namespace TodoApi.Controllers
         [HttpPost]
         public ActionResult<TodoItem> Create(CreateTodoDto todoDto)
         {
+            if (string.IsNullOrWhiteSpace(todoDto.Title))
+            {
+                return BadRequest(new ApiErrorResponse("Erro de Validação", "O título é obrigatório."));
+            }
+
             var todoItem = new TodoItem
             {
                 Title = todoDto.Title,
@@ -73,6 +78,11 @@ namespace TodoApi.Controllers
         [HttpPut("{id}")]
         public IActionResult Update(int id, [FromBody] CreateTodoDto todoDto)
         {
+            if (string.IsNullOrWhiteSpace(todoDto.Title))
+            {
+                return BadRequest(new ApiErrorResponse("Erro de Validação", "O título é obrigatório."));
+            }
+
             var task = _todoService.GetById(id);
 
             if (task == null)
