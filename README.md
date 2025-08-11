@@ -82,7 +82,7 @@ Siga o passo-a-passo abaixo para configurar o ambiente de desenvolvimento.
 Primeiro, clone o repositório do GitHub para a sua máquina local.
 
 ```bash
-git clone [https://github.com/Ismaylla/case-dev-junior.git](https://github.com/Ismaylla/case-dev-junior.git)
+git clone https://github.com/Ismaylla/case-dev-junior.git
 cd case-dev-junior
 ```
 
