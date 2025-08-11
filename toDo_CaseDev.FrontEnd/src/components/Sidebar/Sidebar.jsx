@@ -3,7 +3,6 @@ import logoMoura from '../../assets/logo-moura.svg';
 import { useState } from 'react';
 import { 
   FaHome, 
-  FaStar, 
   FaUserCircle,
   FaCircle, 
   FaRegCircle,
@@ -50,13 +49,6 @@ const statusOptions = [
         >
           <FaHome className={styles.navIcon} />
           Minhas Tarefas
-        </button>
-        
-        <button 
-          className={styles.navButton}
-        >
-          <FaStar className={styles.navIcon} />
-          Importantes
         </button>
         
         {/* Dropdown de Status */}

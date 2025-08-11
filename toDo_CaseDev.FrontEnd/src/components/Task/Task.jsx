@@ -1,9 +1,9 @@
 import styles from './Task.module.css';
 import { useState } from 'react';
-import { FaStar, FaRegStar, FaEdit } from 'react-icons/fa';
+import { FaEdit } from 'react-icons/fa';
 import { EditTaskModal } from '../EditTaskModal/EditTaskModal';
 
-export const Task = ({ task, onStatusChange, onDelete, onToggleImportant, onEdit }) => {
+export const Task = ({ task, onStatusChange, onDelete, onEdit }) => {
   const [isEditing, setIsEditing] = useState(false);
 
   const statusMap = {
@@ -23,17 +23,6 @@ export const Task = ({ task, onStatusChange, onDelete, onToggleImportant, onEdit
     <>
       <div className={`${styles.task} ${currentStatus.class}`}>
         <div className={styles.taskHeader}>
-          <button 
-            onClick={() => onToggleImportant(task.id)}
-            className={styles.importantButton}
-            aria-label={task.important ? 'Desmarcar como importante' : 'Marcar como importante'}
-          >
-            {task.important ? (
-              <FaStar className={styles.importantIcon} />
-            ) : (
-              <FaRegStar className={styles.importantIcon} />
-            )}
-          </button>
           <h3 className={styles.taskTitle}>{task.title}</h3>
         </div>
         
