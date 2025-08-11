@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 [ApiController]
 [Route("api/auth")]
@@ -6,11 +7,13 @@ public class AuthController : ControllerBase
 {
     private readonly AuthService _authService;
     private readonly UserService _userService;
+    private readonly ILogger<AuthController> _logger;
 
-    public AuthController(AuthService authService, UserService userService)
+    public AuthController(AuthService authService, UserService userService, ILogger<AuthController> logger)
     {
         _authService = authService;
         _userService = userService;
+        _logger = logger;
     }
 
     [HttpPost("register")]
@@ -34,7 +37,8 @@ public class AuthController : ControllerBase
         }
         catch (Exception ex)
         {
-            return BadRequest(new { message = ex.Message });
+            _logger.LogError(ex, "Erro interno ao registrar usuário com email {Email}.", dto.Email);
+            return StatusCode(500, new { error = "Ocorreu um erro ao processar sua solicitação." });
         }
     }
 
@@ -44,12 +48,20 @@ public class AuthController : ControllerBase
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
-        var user = _authService.ValidateUser(dto.Email, dto.Password);
+        try
+        {
+            var user = _authService.ValidateUser(dto.Email, dto.Password);
 
-        if (user == null)
-            return Unauthorized(new { message = "Credenciais inválidas." });
+            if (user == null)
+                return Unauthorized(new { message = "Credenciais inválidas." });
 
-        var token = _authService.GenerateJwtToken(user);
-        return Ok(new { access_token = token });
+            var token = _authService.GenerateJwtToken(user);
+            return Ok(new { access_token = token });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Erro interno ao tentar logar usuário com email {Email}.", dto.Email);
+            return StatusCode(500, new { error = "Ocorreu um erro ao processar sua solicitação." });
+        }
     }
 }
