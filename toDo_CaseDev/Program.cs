@@ -12,7 +12,7 @@ var jwtSecret = builder.Configuration["Jwt:Secret"] ?? "sua_chave_secreta_aqui";
 
 // Configuração de CORS para produção
 var allowedOrigins = builder.Configuration.GetSection("AllowedOrigins").Get<string[]>() 
-    ?? new[] { "https://seusite.com", "https://www.seusite.com" };
+    ?? Array.Empty<string>();
 
 builder.Services.AddCors(options =>
 {

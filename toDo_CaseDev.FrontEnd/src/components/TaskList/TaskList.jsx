@@ -20,7 +20,6 @@ export const TaskList = ({ tasks, onStatusChange, onDelete, onToggleImportant, o
                 task={task}
                 onStatusChange={onStatusChange}
                 onDelete={onDelete}
-                onToggleImportant={onToggleImportant}
                 onEdit={onEdit}
               />
             ))}
