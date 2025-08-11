@@ -12,7 +12,7 @@ import {
 } from 'react-icons/fa';
 import { IoIosArrowDown } from 'react-icons/io';
 
-export const Sidebar = ({ userName }) => {
+export const Sidebar = ({ userName, onFilterChange, currentFilter }) => {
   const [statusOpen, setStatusOpen] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState('');
 
@@ -21,6 +21,11 @@ export const Sidebar = ({ userName }) => {
     { name: 'Em Andamento', icon: <FaClock className={styles.statusIcon} /> },
     { name: 'Concluídas', icon: <FaCheckCircle className={styles.statusIcon} /> }
   ];
+
+  const handleStatusSelect = (status) => {
+    onFilterChange(status);
+    setStatusOpen(false);
+  };
 
   return (
     <aside className={styles.sidebar}>
@@ -39,12 +44,17 @@ export const Sidebar = ({ userName }) => {
 
       {/* Navegação */}
       <nav className={styles.nav}>
-        <button className={styles.navButton}>
+        <button 
+          className={`${styles.navButton} ${currentFilter === 'all' ? styles.active : ''}`}
+          onClick={() => onFilterChange('all')}
+        >
           <FaHome className={styles.navIcon} />
           Minhas Tarefas
         </button>
         
-        <button className={styles.navButton}>
+        <button 
+          className={styles.navButton}
+        >
           <FaStar className={styles.navIcon} />
           Importantes
         </button>
@@ -52,7 +62,7 @@ export const Sidebar = ({ userName }) => {
         {/* Dropdown de Status */}
         <div className={styles.statusDropdown}>
           <button 
-            className={`${styles.navButton} ${styles.withArrow}`} 
+            className={`${styles.navButton} ${styles.withArrow} ${currentFilter.includes('status') ? styles.active : ''}`} 
             onClick={() => setStatusOpen(!statusOpen)}
           >
             <div className={styles.statusTitle}>
@@ -70,6 +80,7 @@ export const Sidebar = ({ userName }) => {
                   className={`${styles.statusOption} ${selectedStatus === option.name ? styles.selected : ''}`}
                   onClick={() => {
                     setSelectedStatus(option.name);
+                    handleStatusSelect(option.name);
                     setStatusOpen(false);
                   }}
                 >
