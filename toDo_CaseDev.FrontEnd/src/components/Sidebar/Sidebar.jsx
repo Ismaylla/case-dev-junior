@@ -16,11 +16,11 @@ export const Sidebar = ({ userName, onFilterChange, currentFilter }) => {
   const [statusOpen, setStatusOpen] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState('');
 
-  const statusOptions = [
-    { name: 'Pendentes', icon: <FaRegCircle className={styles.statusIcon} /> },
-    { name: 'Em Andamento', icon: <FaClock className={styles.statusIcon} /> },
-    { name: 'Concluídas', icon: <FaCheckCircle className={styles.statusIcon} /> }
-  ];
+const statusOptions = [
+  { name: 'Pendentes', value: 'pending', icon: <FaRegCircle className={styles.statusIcon} /> },
+  { name: 'Em Andamento', value: 'in-progress', icon: <FaClock className={styles.statusIcon} /> },
+  { name: 'Concluídas', value: 'completed', icon: <FaCheckCircle className={styles.statusIcon} /> }
+];
 
   const handleStatusSelect = (status) => {
     onFilterChange(status);
@@ -80,7 +80,7 @@ export const Sidebar = ({ userName, onFilterChange, currentFilter }) => {
                   className={`${styles.statusOption} ${selectedStatus === option.name ? styles.selected : ''}`}
                   onClick={() => {
                     setSelectedStatus(option.name);
-                    handleStatusSelect(option.name);
+                    handleStatusSelect(option.value);
                     setStatusOpen(false);
                   }}
                 >

@@ -13,7 +13,7 @@ const taskService = {
    * Obtém todas as tarefas
    * @returns {Promise<Array<TaskDTO>>}
    */
-  getAll: () => api.get("Todo").then(res => res.data),
+  getAll: () => api.get("tasks").then(res => res.data),
 
   /**
    * Cria uma nova tarefa
@@ -22,7 +22,7 @@ const taskService = {
    * @param {string} taskData.description
    * @returns {Promise<TaskDTO>}
    */
-  create: (taskData) => api.post("Todo", taskData).then(res => res.data),
+  create: (taskData) => api.post("tasks", taskData).then(res => res.data),
 
   /**
    * Atualiza uma tarefa
@@ -32,7 +32,7 @@ const taskService = {
    * @param {string} taskData.description
    * @returns {Promise<TaskDTO>}
    */
-  update: (id, taskData) => api.put(`Todo/${id}`, taskData).then(res => res.data),
+  update: (id, taskData) => api.put(`tasks/${id}`, taskData).then(res => res.data),
 
   /**
    * Atualiza o status de uma tarefa
@@ -42,14 +42,14 @@ const taskService = {
    * @returns {Promise<TaskDTO>}
    */
   updateStatus: (id, statusData) => 
-    api.put(`Todo/${id}/status`, statusData).then(res => res.data),
+    api.put(`tasks/${id}/status`, statusData).then(res => res.data),
 
   /**
    * Deleta uma tarefa
    * @param {number} id 
    * @returns {Promise<void>}
    */
-  delete: (id) => api.delete(`Todo/${id}`),
+  delete: (id) => api.delete(`tasks/${id}`),
 };
 
 export { taskService };
