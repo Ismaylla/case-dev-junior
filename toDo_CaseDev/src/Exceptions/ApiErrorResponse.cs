@@ -1,4 +1,4 @@
-namespace TodoApi.Exceptions
+namespace TaskApi.Exceptions
 {
     public class ApiErrorResponse
     {
