@@ -1,7 +1,3 @@
-using Xunit;
-using TaskApi.Models;
-using System;
-
 namespace TaskApi.UnitTests.Service
 {
     public class UserServiceTests

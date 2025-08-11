@@ -1,5 +1,3 @@
-using TaskApi.Models;
-
 namespace TaskApi.UnitTests.TestDoubles
 {
     public interface ITestAuthService

@@ -1,6 +1,3 @@
-using TaskApi.Models;
-using TaskApi.Services;
-
 namespace TaskApi.UnitTests.TestDoubles
 {
     public class TestUserService : ITestUserService

@@ -4,7 +4,6 @@ using TaskApi.Controllers;
 using TaskApi.Exceptions;
 using TaskApi.Models;
 using TaskApi.Services;
-using Xunit;
 using TaskStatus = TaskApi.Models.TaskStatus;
 
 namespace TaskApi.UnitTests.Controller
