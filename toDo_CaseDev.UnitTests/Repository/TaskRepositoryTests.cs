@@ -1,15 +1,16 @@
-using TodoApi.Models;
-using TodoApi.Repositories;
+using TaskApi.Models;
+using TaskApi.Repositories;
+using TaskStatus = TaskApi.Models.TaskStatus;
 
-namespace toDo_CaseDev.UnitTests.Repository {
-    public class TodoRepositoryTests
+namespace TaskApi.UnitTests.Repository {
+    public class TaskRepositoryTests
     {
         private readonly TaskRepository _repository;
 
-        public TodoRepositoryTests()
+        public TaskRepositoryTests()
         {
             _repository = new TaskRepository();
-            // Clear any existing tasks before each test
+            // Limpa qualquer task existente antes de cada teste
             foreach (var task in _repository.GetAll().ToList())
             {
                 _repository.Delete(task.Id);
@@ -31,8 +32,8 @@ namespace toDo_CaseDev.UnitTests.Repository {
         public void GetAll_WithTasks_ReturnsAllTasks()
         {
             // Arrange
-            var task1 = new TodoItem { Title = "Título 1", Description = "Descrição 1" };
-            var task2 = new TodoItem { Title = "Título 2", Description = "Descrição 2" };
+            var task1 = new TaskItem { Title = "Título 1", Description = "Descrição 1" };
+            var task2 = new TaskItem { Title = "Título 2", Description = "Descrição 2" };
 
             _repository.Create(task1);
             _repository.Create(task2);
@@ -50,8 +51,8 @@ namespace toDo_CaseDev.UnitTests.Repository {
         public void GetAll_AfterDelete_ReturnsRemainingTasks()
         {
             // Arrange
-            var task1 = _repository.Create(new TodoItem { Title = "Tarefa 1", Description = "Descrição 1" });
-            var task2 = _repository.Create(new TodoItem { Title = "Tarefa 2", Description = "Descrição 2" });
+            var task1 = _repository.Create(new TaskItem { Title = "Tarefa 1", Description = "Descrição 1" });
+            var task2 = _repository.Create(new TaskItem { Title = "Tarefa 2", Description = "Descrição 2" });
 
             // Act
             _repository.Delete(task1.Id);
@@ -65,10 +66,10 @@ namespace toDo_CaseDev.UnitTests.Repository {
 
         #region GetById Tests
         [Fact]
-        public void GetById_WhenTaskExists_ReturnsTodoItem()
+        public void GetById_WhenTaskExists_ReturnsTaskItem()
         {
             // Arrange
-            var task = new TodoItem { Title = "Título da task", Description = "Descrição da task" };
+            var task = new TaskItem { Title = "Título da task", Description = "Descrição da task" };
             var createdTask = _repository.Create(task);
 
             // Act
@@ -78,7 +79,7 @@ namespace toDo_CaseDev.UnitTests.Repository {
             Assert.NotNull(result);
             Assert.Equal("Título da task", result.Title);
             Assert.Equal("Descrição da task", result.Description);
-            Assert.Equal(TodoStatus.Pendente, result.Status);
+            Assert.Equal(TaskStatus.Pendente, result.Status);
         }
 
         [Fact]
@@ -95,13 +96,13 @@ namespace toDo_CaseDev.UnitTests.Repository {
         public void GetById_AfterUpdate_ReturnsUpdatedTask()
         {
             // Arrange
-            var task = _repository.Create(new TodoItem { Title = "Original", Description = "Original" });
-            var updated = new TodoItem 
+            var task = _repository.Create(new TaskItem { Title = "Original", Description = "Original" });
+            var updated = new TaskItem 
             { 
                 Id = task.Id, 
                 Title = "Updated", 
                 Description = "Updated", 
-                Status = TodoStatus.EmAndamento 
+                Status = TaskStatus.EmAndamento 
             };
             _repository.Update(updated);
 
@@ -112,7 +113,7 @@ namespace toDo_CaseDev.UnitTests.Repository {
             Assert.NotNull(result);
             Assert.Equal("Updated", result.Title);
             Assert.Equal("Updated", result.Description);
-            Assert.Equal(TodoStatus.EmAndamento, result.Status);
+            Assert.Equal(TaskStatus.EmAndamento, result.Status);
         }
         #endregion
 
@@ -121,9 +122,9 @@ namespace toDo_CaseDev.UnitTests.Repository {
         public void Create_WithEmptyTitle_ThrowsArgumentException()
         {
             // Arrange
-            var task = new TodoItem { Title = string.Empty, Description = "Descrição" };
+            var task = new TaskItem { Title = string.Empty, Description = "Descrição" };
 
-            // Act & Assert
+            // Assert
             Assert.Throws<ArgumentException>(() => _repository.Create(task));
         }
 
@@ -131,9 +132,9 @@ namespace toDo_CaseDev.UnitTests.Repository {
         public void Create_WithNullTitle_ThrowsArgumentException()
         {
             // Arrange
-            var task = new TodoItem { Title = null!, Description = "Descrição" };
+            var task = new TaskItem { Title = null!, Description = "Descrição" };
 
-            // Act & Assert
+            // Assert
             Assert.Throws<ArgumentException>(() => _repository.Create(task));
         }
 
@@ -141,9 +142,9 @@ namespace toDo_CaseDev.UnitTests.Repository {
         public void Create_WithWhitespaceTitle_ThrowsArgumentException()
         {
             // Arrange
-            var task = new TodoItem { Title = "   ", Description = "Descrição" };
+            var task = new TaskItem { Title = "   ", Description = "Descrição" };
 
-            // Act & Assert
+            // Assert
             Assert.Throws<ArgumentException>(() => _repository.Create(task));
         }
 
@@ -151,14 +152,14 @@ namespace toDo_CaseDev.UnitTests.Repository {
         public void Create_AssignsIdAndSetsPendingStatus()
         {
             // Arrange
-            var task = new TodoItem { Title = "Título da task", Description = "Descrição da task" };
+            var task = new TaskItem { Title = "Título da task", Description = "Descrição da task" };
 
             // Act
             var result = _repository.Create(task);
 
             // Assert
             Assert.True(result.Id > 0);
-            Assert.Equal(TodoStatus.Pendente, result.Status);
+            Assert.Equal(TaskStatus.Pendente, result.Status);
             Assert.Equal("Título da task", result.Title);
             Assert.Equal("Descrição da task", result.Description);
         }
@@ -167,8 +168,8 @@ namespace toDo_CaseDev.UnitTests.Repository {
         public void Create_MultipleTasks_AssignsUniqueIds()
         {
             // Arrange
-            var task1 = new TodoItem { Title = "Tarefa 1", Description = "Primeira" };
-            var task2 = new TodoItem { Title = "Tarefa 2", Description = "Segunda" };
+            var task1 = new TaskItem { Title = "Tarefa 1", Description = "Primeira" };
+            var task2 = new TaskItem { Title = "Tarefa 2", Description = "Segunda" };
 
             // Act
             var result1 = _repository.Create(task1);
@@ -183,7 +184,7 @@ namespace toDo_CaseDev.UnitTests.Repository {
         public void Create_WithNullDescription_SetsEmptyString()
         {
             // Arrange
-            var task = new TodoItem { Title = "Tarefa", Description = null! };
+            var task = new TaskItem { Title = "Tarefa", Description = null! };
 
             // Act
             var result = _repository.Create(task);
@@ -196,11 +197,11 @@ namespace toDo_CaseDev.UnitTests.Repository {
         public void Create_PreservesInputData()
         {
             // Arrange
-            var task = new TodoItem 
+            var task = new TaskItem 
             { 
                 Title = "Título da task",
                 Description = "Descrição da task",
-                Status = TodoStatus.EmAndamento
+                Status = TaskStatus.EmAndamento
             };
 
             // Act
@@ -209,7 +210,7 @@ namespace toDo_CaseDev.UnitTests.Repository {
             // Assert
             Assert.Equal("Título da task", result.Title);
             Assert.Equal("Descrição da task", result.Description);
-            Assert.Equal(TodoStatus.Pendente, result.Status);
+            Assert.Equal(TaskStatus.Pendente, result.Status);
         }
         #endregion
 
@@ -218,10 +219,10 @@ namespace toDo_CaseDev.UnitTests.Repository {
         public void Update_WithEmptyTitle_ThrowsArgumentException()
         {
             // Arrange
-            var task = _repository.Create(new TodoItem { Title = "Título da task", Description = "Descrição da task" });
-            var updateTask = new TodoItem { Id = task.Id, Title = string.Empty, Description = "Desc" };
+            var task = _repository.Create(new TaskItem { Title = "Título da task", Description = "Descrição da task" });
+            var updateTask = new TaskItem { Id = task.Id, Title = string.Empty, Description = "Descrição" };
 
-            // Act & Assert
+            // Assert
             Assert.Throws<ArgumentException>(() => _repository.Update(updateTask));
         }
 
@@ -229,10 +230,10 @@ namespace toDo_CaseDev.UnitTests.Repository {
         public void Update_WithNullTitle_ThrowsArgumentException()
         {
             // Arrange
-            var task = _repository.Create(new TodoItem { Title = "Título da task", Description = "Descrição da task" });
-            var updateTask = new TodoItem { Id = task.Id, Title = null!, Description = "Descrição" };
+            var task = _repository.Create(new TaskItem { Title = "Título da task", Description = "Descrição da task" });
+            var updateTask = new TaskItem { Id = task.Id, Title = null!, Description = "Descrição" };
 
-            // Act & Assert
+            // Assert
             Assert.Throws<ArgumentException>(() => _repository.Update(updateTask));
         }
 
@@ -240,26 +241,26 @@ namespace toDo_CaseDev.UnitTests.Repository {
         public void Update_WithWhitespaceTitle_ThrowsArgumentException()
         {
             // Arrange
-            var task = _repository.Create(new TodoItem { Title = "Título da task", Description = "Descrição da task" });
-            var updateTask = new TodoItem { Id = task.Id, Title = "   ", Description = "Descrição" };
+            var task = _repository.Create(new TaskItem { Title = "Título da task", Description = "Descrição da task" });
+            var updateTask = new TaskItem { Id = task.Id, Title = "   ", Description = "Descrição" };
 
-            // Act & Assert
+            // Assert
             Assert.Throws<ArgumentException>(() => _repository.Update(updateTask));
         }
 
         [Fact]
-        public void Update_WhenTaskExists_UpdatesAndReturnsTodoItem()
+        public void Update_WhenTaskExists_UpdatesAndReturnsTaskItem()
         {
             // Arrange
-            var task = new TodoItem { Title = "Título da task", Description = "Título da task" };
+            var task = new TaskItem { Title = "Título da task", Description = "Título da task" };
             var created = _repository.Create(task);
 
-            var updated = new TodoItem
+            var updated = new TaskItem
             {
                 Id = created.Id,
                 Title = "Atualizada",
                 Description = "Descrição Atualizada",
-                Status = TodoStatus.EmAndamento
+                Status = TaskStatus.EmAndamento
             };
 
             // Act
@@ -275,7 +276,7 @@ namespace toDo_CaseDev.UnitTests.Repository {
         public void Update_WhenTaskDoesNotExist_ThrowsKeyNotFoundException()
         {
             // Arrange
-            var nonExistentTask = new TodoItem
+            var nonExistentTask = new TaskItem
             {
                 Id = 999,
                 Title = "Não Existe",
@@ -291,13 +292,13 @@ namespace toDo_CaseDev.UnitTests.Repository {
         public void Update_PreservesId()
         {
             // Arrange
-            var original = _repository.Create(new TodoItem { Title = "Título da task", Description = "Descrição da task" });
-            var updated = new TodoItem
+            var original = _repository.Create(new TaskItem { Title = "Título da task", Description = "Descrição da task" });
+            var updated = new TaskItem
             {
                 Id = original.Id,
                 Title = "Updated",
                 Description = "Updated",
-                Status = TodoStatus.EmAndamento
+                Status = TaskStatus.EmAndamento
             };
 
             // Act
@@ -313,16 +314,16 @@ namespace toDo_CaseDev.UnitTests.Repository {
         public void UpdateStatus_WhenTaskExists_UpdatesStatus()
         {
             // Arrange
-            var task = new TodoItem { Title = "Pendente", Description = "Para Atualizar" };
+            var task = new TaskItem { Title = "Pendente", Description = "Para Atualizar" };
             var created = _repository.Create(task);
 
             // Act
-            _repository.UpdateStatus(created.Id, TodoStatus.EmAndamento);
+            _repository.UpdateStatus(created.Id, TaskStatus.EmAndamento);
 
             // Assert
             var updated = _repository.GetById(created.Id);
             Assert.NotNull(updated);
-            Assert.Equal(TodoStatus.EmAndamento, updated.Status);
+            Assert.Equal(TaskStatus.EmAndamento, updated.Status);
             Assert.Equal("Pendente", updated.Title); // outros campos permanecem iguais
         }
 
@@ -330,7 +331,7 @@ namespace toDo_CaseDev.UnitTests.Repository {
         public void UpdateStatus_WhenTaskDoesNotExist_DoesNotThrow()
         {
             // Act
-            var exception = Record.Exception(() => _repository.UpdateStatus(999, TodoStatus.EmAndamento));
+            var exception = Record.Exception(() => _repository.UpdateStatus(999, TaskStatus.EmAndamento));
 
             //Assert
             Assert.Null(exception);
@@ -340,42 +341,42 @@ namespace toDo_CaseDev.UnitTests.Repository {
         public void UpdateStatus_OnlyChangesStatus()
         {
             // Arrange
-            var task = _repository.Create(new TodoItem 
+            var task = _repository.Create(new TaskItem 
             { 
                 Title = "Título da task", 
                 Description = "Descrição" 
             });
 
             // Act
-            _repository.UpdateStatus(task.Id, TodoStatus.EmAndamento);
+            _repository.UpdateStatus(task.Id, TaskStatus.EmAndamento);
 
             // Assert
             var updated = _repository.GetById(task.Id);
             Assert.NotNull(updated);
             Assert.Equal("Título da task", updated.Title);
             Assert.Equal("Descrição", updated.Description);
-            Assert.Equal(TodoStatus.EmAndamento, updated.Status);
+            Assert.Equal(TaskStatus.EmAndamento, updated.Status);
         }
 
         [Fact]
         public void UpdateStatus_CanChangeMultipleTimes()
         {
             // Arrange
-            var task = _repository.Create(new TodoItem { Title = "Test", Description = "Test" });
+            var task = _repository.Create(new TaskItem { Title = "Test", Description = "Test" });
 
             // Act
-            _repository.UpdateStatus(task.Id, TodoStatus.EmAndamento);
+            _repository.UpdateStatus(task.Id, TaskStatus.EmAndamento);
 
             // Assert
             var inProgress = _repository.GetById(task.Id);
-            Assert.Equal(TodoStatus.EmAndamento, inProgress?.Status);
+            Assert.Equal(TaskStatus.EmAndamento, inProgress?.Status);
 
             //Act
-            _repository.UpdateStatus(task.Id, TodoStatus.Concluida);
+            _repository.UpdateStatus(task.Id, TaskStatus.Concluida);
 
             //Assert
             var completed = _repository.GetById(task.Id);
-            Assert.Equal(TodoStatus.Concluida, completed?.Status);
+            Assert.Equal(TaskStatus.Concluida, completed?.Status);
         }
         #endregion
 
@@ -384,7 +385,7 @@ namespace toDo_CaseDev.UnitTests.Repository {
         public void Delete_WhenTaskExists_RemovesTask()
         {
             // Arrange
-            var task = new TodoItem { Title = "Task para deletar", Description = "Será Removida" };
+            var task = new TaskItem { Title = "Task para deletar", Description = "Será Removida" };
             var created = _repository.Create(task);
 
             // Act
@@ -413,8 +414,8 @@ namespace toDo_CaseDev.UnitTests.Repository {
         public void Delete_RemovesOnlySpecifiedTask()
         {
             // Arrange
-            var task1 = _repository.Create(new TodoItem { Title = "Task 1", Description = "Descrição 1" });
-            var task2 = _repository.Create(new TodoItem { Title = "Task 2", Description = "Descrição 2" });
+            var task1 = _repository.Create(new TaskItem { Title = "Task 1", Description = "Descrição 1" });
+            var task2 = _repository.Create(new TaskItem { Title = "Task 2", Description = "Descrição 2" });
 
             // Act
             _repository.Delete(task1.Id);
@@ -430,28 +431,28 @@ namespace toDo_CaseDev.UnitTests.Repository {
         public void FullLifecycle_CreateUpdateStatusDelete_WorksAsExpected()
         {
             // Create
-            var newTask = new TodoItem { Title = "Teste geral", Description = "Descrição do teste geral" };
+            var newTask = new TaskItem { Title = "Teste geral", Description = "Descrição do teste geral" };
             var created = _repository.Create(newTask);
             Assert.NotNull(created);
-            Assert.Equal(TodoStatus.Pendente, created.Status);
+            Assert.Equal(TaskStatus.Pendente, created.Status);
 
             // Update Status
-            _repository.UpdateStatus(created.Id, TodoStatus.EmAndamento);
+            _repository.UpdateStatus(created.Id, TaskStatus.EmAndamento);
             var inProgress = _repository.GetById(created.Id);
             Assert.NotNull(inProgress);
-            Assert.Equal(TodoStatus.EmAndamento, inProgress.Status);
+            Assert.Equal(TaskStatus.EmAndamento, inProgress.Status);
 
             // Update Content
-            var updated = new TodoItem
+            var updated = new TaskItem
             {
                 Id = created.Id,
                 Title = "Título atualizado",
                 Description = "Descrição atualizada",
-                Status = TodoStatus.Concluida
+                Status = TaskStatus.Concluida
             };
             var updatedResult = _repository.Update(updated);
             Assert.Equal("Título atualizado", updatedResult.Title);
-            Assert.Equal(TodoStatus.Concluida, updatedResult.Status);
+            Assert.Equal(TaskStatus.Concluida, updatedResult.Status);
 
             // Delete
             _repository.Delete(created.Id);
