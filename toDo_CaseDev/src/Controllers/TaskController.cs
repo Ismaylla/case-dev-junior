@@ -7,23 +7,27 @@ namespace TaskApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class TodoController : ControllerBase
+    public class TaskController : ControllerBase
     {
-        private readonly ITaskService _todoService;
-        private readonly ILogger<TodoController> _logger;
+        private readonly ITaskService _taskService;
+        private readonly ILogger<TaskController> _logger;
 
-        public TodoController(ITaskService todoService)
+        public TaskController(ITaskService taskService, ILogger<TaskController> logger)
         {
-            _todoService = todoService;
+            _taskService = taskService;
+            _logger = logger;
         }
 
         // GET: api/todo - Lista todas as tarefas.
         [HttpGet]
         public ActionResult<List<TaskDto>> GetAll()
         {
+
+            _logger.LogInformation("Iniciando busca de todos os registros de task, para usuário.");
+
             try
             {
-                var tasks = _todoService.GetAll();
+                var tasks = _taskService.GetAll();
                 var tasksDto = tasks.Select(task => new TaskDto
                 {
                     Id = task.Id,
@@ -36,7 +40,10 @@ namespace TaskApi.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(new ApiErrorResponse("Erro Interno", ex.Message));
+
+                _logger.LogInformation(ex.Message);
+                return BadRequest(new ApiErrorResponse("Erro Interno", "asfasasasas"));
+
             }
         }
 
@@ -46,7 +53,7 @@ namespace TaskApi.Controllers
         {
             try
             {
-                var task = _todoService.GetById(id);
+                var task = _taskService.GetById(id);
                 if (task == null)
                     return NotFound(new ApiErrorResponse("Recurso Não Encontrado", "A tarefa com o ID fornecido não existe."));
 
@@ -68,22 +75,22 @@ namespace TaskApi.Controllers
 
         // POST: api/todo - Cria uma nova tarefa.
         [HttpPost]
-        public ActionResult<TaskItem> Create([FromBody] CreateTaskDto todoDto)
+        public ActionResult<TaskItem> Create([FromBody] CreateTaskDto taskDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
             try
             {
-                var todoItem = new TaskItem
+                var taskItem = new TaskItem
                 {
-                    Title = todoDto.Title,
-                    Description = todoDto.Description ?? string.Empty
+                    Title = taskDto.Title,
+                    Description = taskDto.Description ?? string.Empty
                 };
 
-                var newTodo = _todoService.Create(todoItem);
+                var newTask = _taskService.Create(taskItem);
 
-                return CreatedAtAction(nameof(GetById), new { id = newTodo.Id }, newTodo);
+                return CreatedAtAction(nameof(GetById), new { id = newTask.Id }, newTask);
             }
             catch (Exception ex)
             {
@@ -93,23 +100,23 @@ namespace TaskApi.Controllers
 
         // PUT: api/todo/{id} - Atualiza uma tarefa.
         [HttpPut("{id}")]
-        public IActionResult Update(int id, [FromBody] CreateTaskDto todoDto)
+        public IActionResult Update(int id, [FromBody] CreateTaskDto taskDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
             try
             {
-                var task = _todoService.GetById(id);
+                var task = _taskService.GetById(id);
 
                 if (task == null)
                     return NotFound(new ApiErrorResponse("Recurso Não Encontrado", "A tarefa com o ID fornecido não existe."));
 
-                task.Title = todoDto.Title;
-                task.Description = todoDto.Description ?? string.Empty;
+                task.Title = taskDto.Title;
+                task.Description = taskDto.Description ?? string.Empty;
 
-                var updatedTodo = _todoService.Update(task);
-                return Ok(updatedTodo);
+                var updatedTask = _taskService.Update(task);
+                return Ok(updatedTask);
             }
             catch (Exception ex)
             {
@@ -126,15 +133,15 @@ namespace TaskApi.Controllers
 
             try
             {
-                var task = _todoService.GetById(id);
+                var task = _taskService.GetById(id);
 
                 if (task == null)
                     return NotFound(new ApiErrorResponse("Recurso Não Encontrado", "A tarefa com o ID fornecido não existe."));
 
-                _todoService.UpdateStatus(id, statusDto.Status);
+                _taskService.UpdateStatus(id, statusDto.Status);
 
                 // Após atualizar o status, buscar a tarefa atualizada para resposta correta
-                var updatedTask = _todoService.GetById(id);
+                var updatedTask = _taskService.GetById(id);
 
                 var taskDto = new TaskDto
                 {
@@ -158,12 +165,12 @@ namespace TaskApi.Controllers
         {
             try
             {
-                var task = _todoService.GetById(id);
+                var task = _taskService.GetById(id);
 
                 if (task == null)
                     return NotFound(new ApiErrorResponse("Recurso Não Encontrado", "A tarefa com o ID fornecido não existe."));
 
-                _todoService.Delete(id);
+                _taskService.Delete(id);
                 return NoContent();
             }
             catch (Exception ex)
