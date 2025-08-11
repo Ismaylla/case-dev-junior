@@ -1,10 +1,11 @@
 import { Task } from '../Task/Task';
 import styles from './TaskList.module.css';
 
-export const TaskList = ({ tasks, onStatusChange, onDelete }) => {
-  const pendingTasks = tasks.filter(task => task.status === 'pending');
-  const inProgressTasks = tasks.filter(task => task.status === 'in-progress');
-  const completedTasks = tasks.filter(task => task.status === 'completed');
+export const TaskList = ({ tasks, onStatusChange, onDelete, onToggleImportant, onEdit }) => {
+  // Filtra as tarefas por status numérico
+  const pendingTasks = tasks.filter(task => task.status === 0);
+  const inProgressTasks = tasks.filter(task => task.status === 1);
+  const completedTasks = tasks.filter(task => task.status === 2);
 
   return (
     <div className={styles.taskListContainer}>
@@ -19,6 +20,8 @@ export const TaskList = ({ tasks, onStatusChange, onDelete }) => {
                 task={task}
                 onStatusChange={onStatusChange}
                 onDelete={onDelete}
+                onToggleImportant={onToggleImportant}
+                onEdit={onEdit}
               />
             ))}
           </div>
@@ -36,6 +39,8 @@ export const TaskList = ({ tasks, onStatusChange, onDelete }) => {
                 task={task}
                 onStatusChange={onStatusChange}
                 onDelete={onDelete}
+                onToggleImportant={onToggleImportant}
+                onEdit={onEdit}
               />
             ))}
           </div>
@@ -53,6 +58,8 @@ export const TaskList = ({ tasks, onStatusChange, onDelete }) => {
                 task={task}
                 onStatusChange={onStatusChange}
                 onDelete={onDelete}
+                onToggleImportant={onToggleImportant}
+                onEdit={onEdit}
               />
             ))}
           </div>
