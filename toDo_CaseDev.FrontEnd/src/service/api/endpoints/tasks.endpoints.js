@@ -1,6 +1,6 @@
 import api from "../api"
 
-export const Todo = {
+export const taskService = {
     
     getAll: api.get('Todo'),
 
