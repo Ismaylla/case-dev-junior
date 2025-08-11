@@ -10,6 +10,7 @@ namespace TaskApi.Controllers
     public class TodoController : ControllerBase
     {
         private readonly ITaskService _todoService;
+        private readonly ILogger<TodoController> _logger;
 
         public TodoController(ITaskService todoService)
         {
