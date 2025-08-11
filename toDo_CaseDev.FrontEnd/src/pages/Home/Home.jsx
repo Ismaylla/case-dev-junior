@@ -132,7 +132,7 @@ export const Home = () => {
           onEdit={editTask}
         />
         
-        <TaskForm onSubmit={addTask} />
+        {filter === 'all' && <TaskForm onSubmit={addTask} />}
       </main>
     </div>
   );
