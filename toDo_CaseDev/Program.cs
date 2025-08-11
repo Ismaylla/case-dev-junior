@@ -30,10 +30,21 @@ builder.Services.AddControllers()
         };
     });
 
+
+//Bloco de injeção de Serviços
+
 //Serviços para usuário e autenticação
 builder.Services.AddSingleton<UserService>();
 builder.Services.AddSingleton<AuthService>(sp =>
     new AuthService(sp.GetRequiredService<UserService>(), jwtSecret));
+
+// Adiciona os serviços necessários ao contêiner de injeção de dependência
+// Registro do repositório como Singleton (uma única instância para toda a aplicação)
+builder.Services.AddSingleton<ITaskRepository, TaskRepository>();
+
+// Registro do serviço TodoService como Scoped (uma instância por requisição HTTP)
+builder.Services.AddScoped<ITaskService, TaskService>(); // Registro do serviço
+builder.Services.AddControllers();
 
 // Configuração do JWT Authentication
 builder.Services.AddAuthentication(options =>
@@ -55,15 +66,6 @@ builder.Services.AddAuthentication(options =>
 
 // Autorização
 builder.Services.AddAuthorization();
-
-
-// Adiciona os serviços necessários ao contêiner de injeção de dependência
-// Registro do repositório como Singleton (uma única instância para toda a aplicação)
-builder.Services.AddSingleton<ITaskRepository, TaskRepository>();
-
-// Registro do serviço TodoService como Scoped (uma instância por requisição HTTP)
-builder.Services.AddScoped<ITaskService, TaskService>(); // Registro do serviço
-builder.Services.AddControllers();
 
 // Swagger (documentação)
 builder.Services.AddSwaggerGen();
