@@ -1,29 +1,31 @@
-using TodoApi.Models;
+using TaskApi.Models;
+using TaskStatus = TaskApi.Models.TaskStatus;
 
-namespace TodoApi.Repositories {
+namespace TaskApi.Repositories
+{
     public class TaskRepository : ITaskRepository
     {
-        private readonly Dictionary<int, TodoItem> _tasks;
+        private readonly Dictionary<int, TaskItem> _tasks;
         private int _nextId;
 
         // Construtor que inicializa o repositório com um dicionário vazio
         public TaskRepository()
         {
-            _tasks = new Dictionary<int, TodoItem>();
+            _tasks = new Dictionary<int, TaskItem>();
             _nextId = _tasks.Any() ? _tasks.Keys.Max() + 1 : 1;
         }
 
         // Retorna todas as tarefas
-        public List<TodoItem> GetAll()
+        public List<TaskItem> GetAll()
         {
             return _tasks.Values.ToList();
         }
 
         // Retorna uma tarefa pelo ID
-        public TodoItem? GetById(int id) => _tasks.GetValueOrDefault(id);
+        public TaskItem? GetById(int id) => _tasks.GetValueOrDefault(id);
 
         // Cria uma nova tarefa
-        public TodoItem Create(TodoItem newTask)
+        public TaskItem Create(TaskItem newTask)
         {
             if (string.IsNullOrWhiteSpace(newTask.Title))
             {
@@ -31,14 +33,14 @@ namespace TodoApi.Repositories {
             }
 
             newTask.Id = _nextId++;
-            newTask.Status = TodoStatus.Pendente; // Define o status inicial como Pendente
+            newTask.Status = TaskStatus.Pendente; // Define o status inicial como Pendente
             newTask.Description ??= string.Empty; // Garante que a descrição nunca seja nula
             _tasks[newTask.Id] = newTask;  // Adiciona ou substitui a tarefa
             return newTask;
         }
 
         // Atualiza uma tarefa existente
-        public TodoItem Update(TodoItem updatedTask)
+        public TaskItem Update(TaskItem updatedTask)
         {
             if (string.IsNullOrWhiteSpace(updatedTask.Title))
             {
@@ -55,14 +57,14 @@ namespace TodoApi.Repositories {
         }
 
         // Atualiza apenas o status de uma tarefa
-        public void UpdateStatus(int id, TodoStatus newStatus)
+        public void UpdateStatus(int id, TaskStatus newStatus)
         {
             if (_tasks.TryGetValue(id, out var taskToUpdate))
             {
                 taskToUpdate.Status = newStatus;
             }
         }
-        
+
         // Remove uma tarefa pelo ID
         public void Delete(int id)
         {
