@@ -9,6 +9,21 @@ var builder = WebApplication.CreateBuilder(args);
 
 var jwtSecret = builder.Configuration["Jwt:Secret"] ?? "sua_chave_secreta_aqui";
 
+// Configuração de CORS para produção
+var allowedOrigins = builder.Configuration.GetSection("AllowedOrigins").Get<string[]>() 
+    ?? new[] { "https://seusite.com", "https://www.seusite.com" };
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("ProductionCors", policy =>
+    {
+        policy.WithOrigins(allowedOrigins)
+              .AllowAnyMethod()
+              .AllowAnyHeader()
+              .AllowCredentials();
+    });
+});
+
 // Configuração de controllers + validação customizada de erros
 builder.Services.AddControllers()
     .ConfigureApiBehaviorOptions(options =>
@@ -56,7 +71,6 @@ builder.Services.AddAuthentication(options =>
 // Autorização
 builder.Services.AddAuthorization();
 
-
 // Adiciona os serviços necessários ao contêiner de injeção de dependência
 // Registro do repositório como Singleton (uma única instância para toda a aplicação)
 builder.Services.AddSingleton<ITaskRepository, TaskRepository>();
@@ -75,6 +89,17 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    
+    // CORS mais permissivo em desenvolvimento
+    app.UseCors(builder => builder
+        .AllowAnyOrigin()
+        .AllowAnyMethod()
+        .AllowAnyHeader());
+}
+else
+{
+    // CORS restrito em produção
+    app.UseCors("ProductionCors");
 }
 
 app.UseHttpsRedirection();
