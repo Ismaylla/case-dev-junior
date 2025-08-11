@@ -2,11 +2,13 @@ using Microsoft.AspNetCore.Mvc;
 using TaskApi.Exceptions;
 using TaskApi.Services;
 using TaskApi.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TaskApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class TodoController : ControllerBase
     {
         private readonly ITaskService _todoService;
