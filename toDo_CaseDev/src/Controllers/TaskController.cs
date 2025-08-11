@@ -6,7 +6,7 @@ using TaskApi.Models;
 namespace TaskApi.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/tasks")]
     public class TaskController : ControllerBase
     {
         private readonly ITaskService _taskService;
@@ -18,11 +18,10 @@ namespace TaskApi.Controllers
             _logger = logger;
         }
 
-        // GET: api/todo - Lista todas as tarefas.
+        // GET: api/tasks - Lista todas as tarefas.
         [HttpGet]
         public ActionResult<List<TaskDto>> GetAll()
         {
-
             _logger.LogInformation("Iniciando busca de todos os registros de task, para usuário.");
 
             try
@@ -40,14 +39,12 @@ namespace TaskApi.Controllers
             }
             catch (Exception ex)
             {
-
-                _logger.LogInformation(ex.Message);
-                return BadRequest(new ApiErrorResponse("Erro Interno", "asfasasasas"));
-
+                _logger.LogError(ex, "Erro interno ao buscar todas as tasks.");
+                return StatusCode(500, new ApiErrorResponse("Erro Interno", "Ocorreu um erro ao processar sua solicitação."));
             }
         }
 
-        // GET: api/todo/{id} - Obtém uma tarefa pelo ID.
+        // GET: api/tasks/{id} - Obtém uma tarefa pelo ID.
         [HttpGet("{id}")]
         public ActionResult<TaskDto> GetById(int id)
         {
@@ -69,11 +66,12 @@ namespace TaskApi.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(new ApiErrorResponse("Erro Interno", ex.Message));
+                _logger.LogError(ex, "Erro interno ao buscar task com ID {TaskId}.", id);
+                return StatusCode(500, new ApiErrorResponse("Erro Interno", "Ocorreu um erro ao processar sua solicitação."));
             }
         }
 
-        // POST: api/todo - Cria uma nova tarefa.
+        // POST: api/tasks - Cria uma nova tarefa.
         [HttpPost]
         public ActionResult<TaskItem> Create([FromBody] CreateTaskDto taskDto)
         {
@@ -94,11 +92,12 @@ namespace TaskApi.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(new ApiErrorResponse("Erro ao criar tarefa", ex.Message));
+                _logger.LogError(ex, "Erro interno ao criar uma nova task.");
+                return StatusCode(500, new ApiErrorResponse("Erro Interno", "Ocorreu um erro ao processar sua solicitação."));
             }
         }
 
-        // PUT: api/todo/{id} - Atualiza uma tarefa.
+        // PUT: api/tasks/{id} - Atualiza uma tarefa.
         [HttpPut("{id}")]
         public IActionResult Update(int id, [FromBody] CreateTaskDto taskDto)
         {
@@ -120,11 +119,12 @@ namespace TaskApi.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(new ApiErrorResponse("Erro ao atualizar tarefa", ex.Message));
+                _logger.LogError(ex, "Erro interno ao atualizar task com ID {TaskId}.", id);
+                return StatusCode(500, new ApiErrorResponse("Erro Interno", "Ocorreu um erro ao processar sua solicitação."));
             }
         }
 
-        // PUT: api/todo/{id}/status - Atualiza o status de uma tarefa.
+        // PUT: api/tasks/{id}/status - Atualiza o status de uma tarefa.
         [HttpPut("{id}/status")]
         public IActionResult UpdateStatus(int id, [FromBody] UpdateTaskStatusDto statusDto)
         {
@@ -140,7 +140,6 @@ namespace TaskApi.Controllers
 
                 _taskService.UpdateStatus(id, statusDto.Status);
 
-                // Após atualizar o status, buscar a tarefa atualizada para resposta correta
                 var updatedTask = _taskService.GetById(id);
 
                 var taskDto = new TaskDto
@@ -155,11 +154,12 @@ namespace TaskApi.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(new ApiErrorResponse("Erro ao atualizar status", ex.Message));
+                _logger.LogError(ex, "Erro interno ao atualizar status da task com ID {TaskId}.", id);
+                return StatusCode(500, new ApiErrorResponse("Erro Interno", "Ocorreu um erro ao processar sua solicitação."));
             }
         }
 
-        // DELETE: api/todo/{id} - Deleta uma tarefa.
+        // DELETE: api/tasks/{id} - Deleta uma tarefa.
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
@@ -175,7 +175,8 @@ namespace TaskApi.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(new ApiErrorResponse("Erro ao deletar tarefa", ex.Message));
+                _logger.LogError(ex, "Erro interno ao deletar task com ID {TaskId}.", id);
+                return StatusCode(500, new ApiErrorResponse("Erro Interno", "Ocorreu um erro ao processar sua solicitação."));
             }
         }
     }
