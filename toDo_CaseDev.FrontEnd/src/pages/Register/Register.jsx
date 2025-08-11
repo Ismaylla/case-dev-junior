@@ -1,17 +1,44 @@
 import styles from './Register.module.css';
 import { AuthForm } from '../../components/AuthForm/AuthForm';
-import empresaBg from '../../assets/fabrica-moura.webp';
 import logoMoura from '../../assets/logo-moura.svg';
-import { Link } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { authService } from '../../service/api/endpoints/auth.endpoints';
+import { useState } from 'react';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export const Register = () => {
   const navigate = useNavigate();
+  const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [successMessage, setSuccessMessage] = useState(null);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e, formData) => {
     e.preventDefault();
-    // Lógica de cadastro
-    navigate('/home');
+    setError(null);
+    setSuccessMessage(null);
+    setIsLoading(true);
+
+    try {
+      // Extrai os dados do formulário
+      const {email, name, password } = formData;
+      
+      // Faz a chamada à API de registro
+      await authService.register({ email, name, password });
+      
+      // Exibe mensagem de sucesso
+      setSuccessMessage('Cadastro realizado com sucesso! Redirecionando para login...');
+      
+      // Redireciona para a página de login após 2 segundos
+      setTimeout(() => {
+        navigate('/login');
+      }, 2000);
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Erro ao fazer login.');
+      setError(err.response?.data?.message || 'Erro ao realizar cadastro. Tente novamente.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -21,13 +48,23 @@ export const Register = () => {
         <img src={logoMoura} alt="Logo Moura" className={styles.navbarLogo} />
       </nav>
 
-      {/* Painel ESQUERDO (formulário) */}
+      {/* Painel do formulário */}
       <div className={styles.leftPanel}>
         <div className={styles.authWrapper}>
           <h1 className={styles.title}>Crie sua conta</h1>
           <p className={styles.subtitle}>Preencha os campos para se cadastrar</p>
           
-          <AuthForm isLogin={false} onSubmit={handleSubmit} />
+          {/* Exibe mensagem de erro se houver */}
+          {error && <div className={styles.errorMessage}>{error}</div>}
+          
+          {/* Exibe mensagem de sucesso se houver */}
+          {successMessage && <div className={styles.successMessage}>{successMessage}</div>}
+          
+          <AuthForm 
+            isLogin={false} 
+            onSubmit={handleSubmit} 
+            isLoading={isLoading}
+          />
           
           <p className={styles.switchText}>
             Já tem uma conta?{' '}
@@ -36,15 +73,6 @@ export const Register = () => {
             </Link>
           </p>
         </div>
-      </div>
-
-      {/* Painel DIREITO (imagem) */}
-      <div className={styles.rightPanel}>
-        <img 
-          src={empresaBg} 
-          alt="Background da empresa" 
-          className={styles.bgImage}
-        />
       </div>
     </div>
   );
