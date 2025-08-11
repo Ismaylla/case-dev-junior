@@ -27,7 +27,7 @@ export const Register = () => {
       await authService.register({ email, name, password });
       
       // Exibe mensagem de sucesso
-      setSuccessMessage('Cadastro realizado com sucesso! Redirecionando para login...');
+      setSuccessMessage('Cadastro realizado com sucesso!');
       
       // Redireciona para a página de login após 2 segundos
       setTimeout(() => {

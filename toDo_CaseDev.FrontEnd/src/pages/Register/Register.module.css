@@ -56,6 +56,13 @@
 }
 
 /* Mensagem de erro */
+.successMessage {
+  color: green;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+/* Mensagem de erro */
 .errorMessage {
   color: var(--error-red);
   text-align: center;

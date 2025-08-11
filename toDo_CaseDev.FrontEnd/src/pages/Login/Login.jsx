@@ -26,7 +26,7 @@ export const Login = () => {
       const response = await authService.login({ email, password });
       
       // Armazena o token no localStorage 
-      localStorage.setItem('authToken', response.data.token);
+      localStorage.setItem('authToken', response.data.access_token);
       
       // Redireciona para a página home após login bem-sucedido
       navigate('/home');
