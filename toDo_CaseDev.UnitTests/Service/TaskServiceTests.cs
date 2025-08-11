@@ -59,8 +59,10 @@ namespace TaskApi.UnitTests.Service
             _mockRepository.Setup(repo => repo.GetAll())
                 .Throws(new InvalidOperationException("Erro de Dados"));
 
-            // Act & Assert
+            // Act
             var exception = Assert.Throws<InvalidOperationException>(() => _service.GetAll());
+
+            //Assert
             Assert.Equal("Erro de Dados", exception.Message);
         }
         #endregion

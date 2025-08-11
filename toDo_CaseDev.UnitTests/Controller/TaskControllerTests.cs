@@ -113,7 +113,7 @@ namespace TaskApi.UnitTests.Controller {
 
         [Fact]
         public void Create_WhenValidationFails_ReturnsBadRequest() {
-            var createDto = new CreateTaskDto { Title = "", Description = "Desc" };
+            var createDto = new CreateTaskDto { Title = string.Empty, Description = "Descrição" };
             _controller.ModelState.AddModelError("Title", "O título é obrigatório");
 
             var result = _controller.Create(createDto);
@@ -139,9 +139,9 @@ namespace TaskApi.UnitTests.Controller {
         #region Update Tests
         [Fact]
         public void Update_WithValidIdAndData_ReturnsOkResult() {
-            var updateDto = new CreateTaskDto { Title = "Atualizada", Description = "Desc" };
+            var updateDto = new CreateTaskDto { Title = "Atualizada", Description = "Descrição" };
             var existingTask = new TaskItem { Id = 1, Title = "Antiga", Description = "Antiga" };
-            var updatedTask = new TaskItem { Id = 1, Title = "Atualizada", Description = "Desc" };
+            var updatedTask = new TaskItem { Id = 1, Title = "Atualizada", Description = "Descrição" };
             _mockTodoService.Setup(service => service.GetById(1)).Returns(existingTask);
             _mockTodoService.Setup(service => service.Update(existingTask)).Returns(updatedTask);
 
@@ -154,7 +154,7 @@ namespace TaskApi.UnitTests.Controller {
 
         [Fact]
         public void Update_WithInvalidId_ReturnsNotFound() {
-            var updateDto = new CreateTaskDto { Title = "Atualizada", Description = "Desc" };
+            var updateDto = new CreateTaskDto { Title = "Atualizada", Description = "Descrição" };
             _mockTodoService.Setup(service => service.GetById(99)).Returns((TaskItem?)null);
 
             var result = _controller.Update(99, updateDto);
@@ -165,7 +165,7 @@ namespace TaskApi.UnitTests.Controller {
 
         [Fact]
         public void Update_WhenServiceThrows_ReturnsInternalServerError() {
-            var updateDto = new CreateTaskDto { Title = "Atualizada", Description = "Desc" };
+            var updateDto = new CreateTaskDto { Title = "Atualizada", Description = "Descrição" };
             var existingTask = new TaskItem { Id = 1, Title = "Antiga", Description = "Antiga" };
             _mockTodoService.Setup(service => service.GetById(1)).Returns(existingTask);
             _mockTodoService.Setup(service => service.Update(It.IsAny<TaskItem>())).Throws(new Exception("Erro"));
@@ -180,8 +180,8 @@ namespace TaskApi.UnitTests.Controller {
         #region UpdateStatus Tests
         [Fact]
         public void UpdateStatus_WithValidId_ReturnsOkResult() {
-            var existingTask = new TaskItem { Id = 1, Title = "Task", Description = "Desc", Status = TaskStatus.Pendente };
-            var updatedTask = new TaskItem { Id = 1, Title = "Task", Description = "Desc", Status = TaskStatus.EmAndamento };
+            var existingTask = new TaskItem { Id = 1, Title = "Task", Description = "Descrição", Status = TaskStatus.Pendente };
+            var updatedTask = new TaskItem { Id = 1, Title = "Task", Description = "Descrição", Status = TaskStatus.EmAndamento };
             _mockTodoService.SetupSequence(service => service.GetById(1)).Returns(existingTask).Returns(updatedTask);
 
             var result = _controller.UpdateStatus(1, new UpdateTaskStatusDto { Status = TaskStatus.EmAndamento });
@@ -203,7 +203,7 @@ namespace TaskApi.UnitTests.Controller {
 
         [Fact]
         public void UpdateStatus_WhenServiceThrows_ReturnsInternalServerError() {
-            var existingTask = new TaskItem { Id = 1, Title = "Task", Description = "Desc" };
+            var existingTask = new TaskItem { Id = 1, Title = "Task", Description = "Descrição" };
             _mockTodoService.Setup(service => service.GetById(1)).Returns(existingTask);
             _mockTodoService.Setup(service => service.UpdateStatus(1, TaskStatus.EmAndamento)).Throws(new Exception("Erro"));
 
@@ -217,7 +217,7 @@ namespace TaskApi.UnitTests.Controller {
         #region Delete Tests
         [Fact]
         public void Delete_WithValidId_ReturnsNoContent() {
-            var existingTask = new TaskItem { Id = 1, Title = "Task", Description = "Desc" };
+            var existingTask = new TaskItem { Id = 1, Title = "Task", Description = "Descrição" };
             _mockTodoService.Setup(service => service.GetById(1)).Returns(existingTask);
 
             var result = _controller.Delete(1);
@@ -237,7 +237,7 @@ namespace TaskApi.UnitTests.Controller {
 
         [Fact]
         public void Delete_WhenServiceThrows_ReturnsInternalServerError() {
-            var existingTask = new TaskItem { Id = 1, Title = "Task", Description = "Desc" };
+            var existingTask = new TaskItem { Id = 1, Title = "Task", Description = "Descrição" };
             _mockTodoService.Setup(service => service.GetById(1)).Returns(existingTask);
             _mockTodoService.Setup(service => service.Delete(1)).Throws(new Exception("Erro"));
 

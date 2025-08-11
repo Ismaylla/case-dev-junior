@@ -1,7 +1,5 @@
-using System;
 using System.ComponentModel;
 using System.Reflection;
-using Xunit;
 
 namespace toDo_CaseDev.UnitTests.Model {
     public static class EnumExtensions {
