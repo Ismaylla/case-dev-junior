@@ -1,5 +1,5 @@
-using TodoApi.Services;
-using TodoApi.Repositories;
+using TaskApi.Services;
+using TaskApi.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -76,7 +76,7 @@ builder.Services.AddAuthorization();
 builder.Services.AddSingleton<ITaskRepository, TaskRepository>();
 
 // Registro do serviço TodoService como Scoped (uma instância por requisição HTTP)
-builder.Services.AddScoped<ITodoService, TodoService>(); // Registro do serviço
+builder.Services.AddScoped<ITaskService, TaskService>(); // Registro do serviço
 builder.Services.AddControllers();
 
 // Swagger (documentação)

@@ -1,37 +1,39 @@
-using TodoApi.Models;
-using TodoApi.Repositories;
+using TaskApi.Models;
+using TaskApi.Repositories;
+using TaskStatus = TaskApi.Models.TaskStatus;
 
-namespace TodoApi.Services {
-    public class TodoService : ITodoService
+namespace TaskApi.Services
+{
+    public class TaskService : ITaskService
     {
         private readonly ITaskRepository _taskRepository;
 
         // Construtor que recebe o repositório via injeção de dependência
-        public TodoService(ITaskRepository taskRepository)
+        public TaskService(ITaskRepository taskRepository)
         {
             _taskRepository = taskRepository;
         }
 
         // Retorna todas as tarefas
-        public List<TodoItem> GetAll() => _taskRepository.GetAll();
+        public List<TaskItem> GetAll() => _taskRepository.GetAll();
 
         // Retorna uma tarefa pelo ID
-        public TodoItem? GetById(int id) => _taskRepository.GetById(id);
+        public TaskItem? GetById(int id) => _taskRepository.GetById(id);
 
         // Cria uma nova tarefa
-        public TodoItem Create(TodoItem newTask)
+        public TaskItem Create(TaskItem newTask)
         {
             return _taskRepository.Create(newTask);
         }
 
         // Atualiza uma tarefa existente
-        public TodoItem Update(TodoItem updatedTask)
+        public TaskItem Update(TaskItem updatedTask)
         {
             return _taskRepository.Update(updatedTask);
         }
 
         // Atualiza apenas o status de uma tarefa
-        public void UpdateStatus(int id, TodoStatus status)
+        public void UpdateStatus(int id, TaskStatus status)
         {
             _taskRepository.UpdateStatus(id, status);
         }
@@ -42,6 +44,6 @@ namespace TodoApi.Services {
             _taskRepository.Delete(id);
         }
 
-        
+
     }
 }

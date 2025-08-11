@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
-public class CreateTodoDto
+
+public class CreateTaskDto
 {
     [Required(ErrorMessage = "O título da tarefa é obrigatório.")]
     [StringLength(100, MinimumLength = 3, ErrorMessage = "O título deve ter entre 3 e 100 caracteres.")]
