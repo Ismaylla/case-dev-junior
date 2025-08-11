@@ -138,9 +138,9 @@ O projeto inclui uma suíte de testes unitários para garantir a qualidade e a c
 Para executar todos os testes automatizados, siga os passos:
 
 1.  Abra um terminal na raiz do projeto.
-2.  Navegue até a pasta do projeto de testes:
+2.  Execute o comando para buildar o projeto:
     ```bash
-    cd toDo_CaseDev.UnitTests
+    dotnet build
     ```
 3.  Execute o comando para rodar os testes:
     ```bash
@@ -164,10 +164,10 @@ O terminal exibirá o resultado de todos os testes, indicando se passaram ou fal
 ## ✒️ Autores
 
 * **Erick Gabriel** - [ErickGabriel7](https://github.com/ErickGabriel7)
-* **Ramon Silva** - [ramonsilva186](https://github.com/ramonsilva186)
 * **Ismaylla Batista** - [Ismaylla](https://github.com/Ismaylla)
-* **Yann Leão** - [YannLeao](https://github.com/YannLeao)
 * **Lucas Henrique** - [Wolf-gangSE](https://github.com/Wolf-gangSE)
+* **Ramon Silva** - [ramonsilva186](https://github.com/ramonsilva186)
+* **Yann Leão** - [YannLeao](https://github.com/YannLeao)
 
 ## 📄 Referências
 
