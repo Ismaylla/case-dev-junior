@@ -133,6 +133,8 @@ A aplicação React estará disponível em `http://localhost:5173`. Ao abrir est
 
 O projeto inclui uma suíte de testes unitários para garantir a qualidade e a corretude da lógica do back-end. Os testes foram criados para validar o comportamento de cada camada da aplicação (Repositories, Services e Controllers) de forma isolada.
 
+A documentação detalhando todos os testes está disponível [aqui](https://github.com/Ismaylla/case-dev-junior/blob/main/toDo_CaseDev.UnitTests/UNIT_TESTS_REPORT.md).
+
 ### 🔧 Execução
 
 Para executar todos os testes automatizados, siga os passos:
